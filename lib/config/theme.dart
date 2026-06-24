@@ -165,19 +165,26 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      scaffoldBackgroundColor: const Color(0xFFF8F9FA),
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: kAccentBlue,
-        brightness: Brightness.light,
-        surface: Colors.white,
+      scaffoldBackgroundColor: kBackground,
+      colorScheme: const ColorScheme.light(
+        surface: kSurface,
         onSurface: kPrimaryText,
         primary: kAccentBlue,
         onPrimary: Colors.white,
         secondary: kAccentBlue,
-        outline: const Color(0xFFE0E0E0),
+        onSecondary: Colors.white,
+        error: kError,
+        onError: Colors.white,
+        surfaceContainerHighest: kSurface,
+        outline: kBorderColor,
+      ),
+      dividerTheme: const DividerThemeData(
+        color: kBorderColor,
+        thickness: 1,
+        space: 0,
       ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.white,
+        backgroundColor: kSurface,
         foregroundColor: kPrimaryText,
         elevation: 0,
         scrolledUnderElevation: 0,
@@ -203,12 +210,11 @@ class AppTheme {
         labelMedium: TextStyle(color: kSecondaryText, fontSize: kFontSmall),
       ),
       cardTheme: CardThemeData(
-        color: Colors.white,
-        elevation: 2,
-        shadowColor: Colors.black.withOpacity(0.05),
+        color: kSurface,
+        elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(kRadiusCard),
-          side: const BorderSide(color: Color(0xFFEEEEEE), width: 1),
+          side: const BorderSide(color: kBorderColor, width: 1),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -227,7 +233,7 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: kPrimaryText,
-          side: const BorderSide(color: Color(0xFFE0E0E0)),
+          side: const BorderSide(color: kBorderColor),
           minimumSize: const Size.fromHeight(48),
           shape: const StadiumBorder(),
           textStyle: const TextStyle(
@@ -244,20 +250,44 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: Colors.white,
+        fillColor: kSurface,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(kRadiusInput),
-          borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
+          borderSide: const BorderSide(color: kBorderColor),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(kRadiusInput),
-          borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
+          borderSide: const BorderSide(color: kBorderColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(kRadiusInput),
           borderSide: const BorderSide(color: kAccentBlue, width: 2),
         ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(kRadiusInput),
+          borderSide: const BorderSide(color: kError),
+        ),
+        labelStyle: const TextStyle(color: kSecondaryText),
+        hintStyle: const TextStyle(color: kSecondaryText, fontSize: kFontBase),
+      ),
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: kPrimaryText,
+        contentTextStyle: const TextStyle(color: Colors.white),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kRadiusCard)),
+        behavior: SnackBarBehavior.floating,
+      ),
+      bottomSheetTheme: const BottomSheetThemeData(
+        backgroundColor: kSurface,
+        modalBackgroundColor: kSurface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+      ),
+      iconTheme: const IconThemeData(color: kPrimaryText),
+      primaryIconTheme: const IconThemeData(color: kAccentBlue),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: kAccentBlue,
       ),
     );
   }

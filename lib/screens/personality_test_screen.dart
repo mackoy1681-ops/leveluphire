@@ -537,90 +537,93 @@ class _PersonalityTestScreenState extends ConsumerState<PersonalityTestScreen> {
                   topRight: Radius.circular(24),
                 ),
               ),
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(kPadL),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 8),
-                    
-                    // Section Indicator
-                    Row(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(kPadL, kPadL, kPadL, 0),
+                    child: Column(
                       children: [
-                        Icon(_getSectionIcon(), color: _electricBlue, size: 20),
-                        const SizedBox(width: 8),
-                        Text(
-                          _getSectionTitle(),
-                          style: TextStyle(
-                            color: _electricBlue,
-                            fontSize: kFontSmall,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      _getSectionDescription(),
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        fontSize: kFontSmall,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    
-                    // Question number
-                    Text(
-                      'Question ${_currentQuestionIndex + 1} of ${currentQuestions.length}',
-                      style: const TextStyle(
-                        color: Colors.white54,
-                        fontSize: 12,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    
-                    // Question Card
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(kPadL),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            _deepSpace,
-                            _nebulaBlue,
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Icon(_getSectionIcon(), color: _electricBlue, size: 20),
+                            const SizedBox(width: 8),
+                            Text(
+                              _getSectionTitle(),
+                              style: TextStyle(
+                                color: _electricBlue,
+                                fontSize: kFontSmall,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1,
+                              ),
+                            ),
                           ],
                         ),
-                        borderRadius: BorderRadius.circular(kRadiusCard),
-                        border: Border.all(
-                          color: _electricBlue.withOpacity(0.3),
-                          width: 1,
+                        const SizedBox(height: 8),
+                        Text(
+                          _getSectionDescription(),
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: kFontSmall,
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        currentQuestion.text,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: kFontTitle,
-                          fontWeight: FontWeight.w500,
-                          height: 1.4,
+                        const SizedBox(height: 16),
+                        Text(
+                          'Question ${_currentQuestionIndex + 1} of ${currentQuestions.length}',
+                          style: const TextStyle(
+                            color: Colors.white54,
+                            fontSize: 12,
+                          ),
                         ),
-                      ),
+                        const SizedBox(height: 16),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(kPadL),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                _deepSpace,
+                                _nebulaBlue,
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(kRadiusCard),
+                            border: Border.all(
+                              color: _electricBlue.withOpacity(0.3),
+                              width: 1,
+                            ),
+                          ),
+                          child: Text(
+                            currentQuestion.text,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: kFontTitle,
+                              fontWeight: FontWeight.w500,
+                              height: 1.4,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 28),
+                      ],
                     ),
-                    const SizedBox(height: 28),
-                    
-                    // Options
-                    ...currentQuestion.options.asMap().entries.map((entry) {
-                      final idx = entry.key;
-                      final option = entry.value;
-                      final isSelected = _answers[currentQuestion.id] == idx;
-                      return _buildOptionCard(idx, option, isSelected, currentQuestion.id);
-                    }),
-                    const SizedBox(height: 24),
-                    
-                    // Next Button
-                    SizedBox(
+                  ),
+                  Expanded(
+                    child: ListView(
+                      padding: const EdgeInsets.symmetric(horizontal: kPadL),
+                      children: [
+                        ...currentQuestion.options.asMap().entries.map((entry) {
+                          final idx = entry.key;
+                          final option = entry.value;
+                          final isSelected = _answers[currentQuestion.id] == idx;
+                          return _buildOptionCard(idx, option, isSelected, currentQuestion.id);
+                        }),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(kPadL, 12, kPadL, 20),
+                    child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: _nextQuestion,
@@ -650,8 +653,8 @@ class _PersonalityTestScreenState extends ConsumerState<PersonalityTestScreen> {
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

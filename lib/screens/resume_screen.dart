@@ -22,7 +22,16 @@ class ResumeScreen extends ConsumerWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           tooltip: 'Back to Home',
-          onPressed: () => ref.read(mainTabIndexProvider.notifier).state = 0,
+          onPressed: () {
+            // If this screen was pushed as a route (web/mobile), pop it.
+            // Otherwise fall back to switching the main tab.
+            final nav = Navigator.of(context);
+            if (nav.canPop()) {
+              nav.pop();
+            } else {
+              ref.read(mainTabIndexProvider.notifier).state = 0;
+            }
+          },
         ),
       ),
       body: Stack(
@@ -128,9 +137,16 @@ class _ResumeCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(kPadL),
         decoration: BoxDecoration(
-          color: kBackground,
+          color: kSurface,
           borderRadius: BorderRadius.circular(kRadiusCard),
           border: Border.all(color: kBorderColor),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x10000000),
+              blurRadius: 8,
+              offset: Offset(0, 2),
+            ),
+          ],
         ),
         child: Row(
           children: [

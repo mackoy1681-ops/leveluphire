@@ -85,7 +85,16 @@ class _InterviewSetupState extends ConsumerState<InterviewSetup> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: kPrimaryText),
           tooltip: 'Back to Home',
-          onPressed: () => ref.read(mainTabIndexProvider.notifier).state = 0,
+          onPressed: () {
+            // If this screen was pushed as a route (web/mobile), pop it.
+            // Otherwise fall back to switching the main tab.
+            final nav = Navigator.of(context);
+            if (nav.canPop()) {
+              nav.pop();
+            } else {
+              ref.read(mainTabIndexProvider.notifier).state = 0;
+            }
+          },
         ),
       ),
       body: SingleChildScrollView(

@@ -30,9 +30,10 @@ class AssessmentScreen extends ConsumerStatefulWidget {
 class _AssessmentScreenState extends ConsumerState<AssessmentScreen> {
   String? _profilePhotoUrl;
 
-  final Color _deepSpace = const Color(0xFF0B0C10);
-  final Color _nebulaBlue = const Color(0xFF1F2833);
-  final Color _electricBlue = const Color(0xFF00E5FF);
+  final Color _pageBackground = kBackground;
+  final Color _panelSurface = kSurface;
+  final Color _softBlue = const Color(0xFFE8F3FF);
+  final Color _electricBlue = kAccentBlue;
 
   @override
   void initState() {
@@ -59,23 +60,23 @@ class _AssessmentScreenState extends ConsumerState<AssessmentScreen> {
 
   void _startAssessment(String testName, String category) {
     if (testName == 'Abstract Reasoning') {
-      Navigator.push(context, MaterialPageRoute(builder: (_) => const AbstractTestScreen()));
+      Navigator.pushNamed(context, kRouteAbstractTest);
     } else if (testName == 'Numerical Reasoning') {
-      Navigator.push(context, MaterialPageRoute(builder: (_) => const NumericalTestScreen()));
+      Navigator.pushNamed(context, kRouteNumericalTest);
     } else if (testName == 'Verbal Reasoning') {
-      Navigator.push(context, MaterialPageRoute(builder: (_) => const VerbalTestScreen()));
+      Navigator.pushNamed(context, kRouteVerbalTest);
     } else if (testName == 'Work Personality Profile') {
-      Navigator.push(context, MaterialPageRoute(builder: (_) => const PersonalityTestScreen()));
+      Navigator.pushNamed(context, kRoutePersonalityTest);
     } else if (testName == 'Integrity & Work Habits') {
-      Navigator.push(context, MaterialPageRoute(builder: (_) => const IntegrityTestScreen()));
+      Navigator.pushNamed(context, kRouteIntegrityTest);
     } else if (testName == 'Interview Practice') {
-      Navigator.push(context, MaterialPageRoute(builder: (_) => const InterviewSetup()));
+      Navigator.pushNamed(context, kRouteInterview);
     } else if (testName == 'Essay Writing') {
-      Navigator.push(context, MaterialPageRoute(builder: (_) => const EssaySetup()));
+      Navigator.pushNamed(context, kRouteEssaySetup);
     } else if (testName == 'English Proficiency Exam') {
-      Navigator.push(context, MaterialPageRoute(builder: (_) => const EnglishProficiencyExam()));
+      Navigator.pushNamed(context, kRouteEnglishExam);
     } else if (testName == 'Civil Service Exam') {
-      Navigator.push(context, MaterialPageRoute(builder: (_) => const CivilServiceTestScreen()));
+      Navigator.pushNamed(context, kRouteCivilService);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Starting $testName assessment...')),
@@ -93,29 +94,38 @@ class _AssessmentScreenState extends ConsumerState<AssessmentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _deepSpace,
+      backgroundColor: _pageBackground,
       appBar: AppBar(
-        title: const Text('Assessments', style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.transparent,
+        title: const Text('Assessments', style: TextStyle(color: kPrimaryText)),
+        backgroundColor: kSurface,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: kPrimaryText),
           tooltip: 'Back to Home',
-          onPressed: () => ref.read(mainTabIndexProvider.notifier).state = 0,
+          onPressed: () {
+            // If this screen was pushed as a route (web/mobile), pop it.
+            // Otherwise fall back to switching the main tab.
+            final nav = Navigator.of(context);
+            if (nav.canPop()) {
+              nav.pop();
+            } else {
+              ref.read(mainTabIndexProvider.notifier).state = 0;
+            }
+          },
         ),
         actions: [
           GestureDetector(
-            onTap: () => ref.read(mainTabIndexProvider.notifier).state = 4,
+            onTap: () => Navigator.pushNamed(context, kRouteProfile),
             child: Padding(
               padding: const EdgeInsets.only(right: 12),
               child: CircleAvatar(
                 radius: 18,
-                backgroundColor: _nebulaBlue,
+                backgroundColor: _softBlue,
                 backgroundImage: _profilePhotoUrl != null
                     ? CachedNetworkImageProvider(_profilePhotoUrl!)
                     : null,
                 child: _profilePhotoUrl == null
-                    ? const Icon(Icons.person, size: 18, color: Colors.white54)
+                    ? const Icon(Icons.person, size: 18, color: kSecondaryText)
                     : null,
               ),
             ),
@@ -124,14 +134,7 @@ class _AssessmentScreenState extends ConsumerState<AssessmentScreen> {
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              _deepSpace,
-              _nebulaBlue,
-            ],
-          ),
+          color: _pageBackground,
         ),
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(kPadL, kPadL, kPadL, 100),
@@ -141,7 +144,7 @@ class _AssessmentScreenState extends ConsumerState<AssessmentScreen> {
               const Text(
                 'Level Up Your Skills',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: kPrimaryText,
                   fontSize: kFontHeading,
                   fontWeight: FontWeight.bold,
                 ),
@@ -150,7 +153,7 @@ class _AssessmentScreenState extends ConsumerState<AssessmentScreen> {
               const Text(
                 'Complete assessments to identify strengths and areas for improvement',
                 style: TextStyle(
-                  color: Colors.white70,
+                  color: kSecondaryText,
                   fontSize: kFontBase,
                 ),
               ),
@@ -158,7 +161,7 @@ class _AssessmentScreenState extends ConsumerState<AssessmentScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 decoration: BoxDecoration(
-                  color: _electricBlue.withOpacity(0.1),
+                  color: _softBlue,
                   borderRadius: BorderRadius.circular(kRadiusPill),
                 ),
                 child: Row(
@@ -272,7 +275,7 @@ class _AssessmentScreenState extends ConsumerState<AssessmentScreen> {
           Text(
             title,
             style: const TextStyle(
-              color: Colors.white,
+              color: kPrimaryText,
               fontSize: kFontTitle,
               fontWeight: FontWeight.bold,
             ),
@@ -293,6 +296,13 @@ class _AssessmentScreenState extends ConsumerState<AssessmentScreen> {
         color: kSurface,
         borderRadius: BorderRadius.circular(kRadiusCard),
         border: Border.all(color: kBorderColor),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x10000000),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
       ),
       child: Material(
         color: Colors.transparent,
@@ -311,7 +321,7 @@ class _AssessmentScreenState extends ConsumerState<AssessmentScreen> {
                       child: Text(
                         title,
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: kPrimaryText,
                           fontSize: kFontBase,
                           fontWeight: FontWeight.bold,
                         ),
@@ -329,7 +339,7 @@ class _AssessmentScreenState extends ConsumerState<AssessmentScreen> {
                           Text(
                             'Take Test',
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Colors.white,
                               fontSize: 11,
                               fontWeight: FontWeight.w500,
                             ),
@@ -338,7 +348,7 @@ class _AssessmentScreenState extends ConsumerState<AssessmentScreen> {
                           Icon(
                             Icons.arrow_forward,
                             size: 12,
-                            color: Colors.black,
+                            color: Colors.white,
                           ),
                         ],
                       ),
@@ -349,7 +359,7 @@ class _AssessmentScreenState extends ConsumerState<AssessmentScreen> {
                 Text(
                   description,
                   style: const TextStyle(
-                    color: Colors.white70,
+                    color: kSecondaryText,
                     fontSize: kFontSmall,
                   ),
                   maxLines: 3,

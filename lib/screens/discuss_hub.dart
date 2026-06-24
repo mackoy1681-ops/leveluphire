@@ -7,8 +7,7 @@ import '../providers/discuss_provider.dart';
 import '../models/discuss_models.dart';
 import '../providers/tab_provider.dart';
 import '../providers/auth_provider.dart';
-import 'create_thread_screen.dart';
-import 'thread_detail_screen.dart';
+import '../utils/constants.dart';
 
 class DiscussHub extends ConsumerStatefulWidget {
   const DiscussHub({super.key});
@@ -117,12 +116,8 @@ class _DiscussHubState extends ConsumerState<DiscussHub> {
                         width: 160,
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const CreateThreadScreen(),
-                              ),
-                            ).then((_) => notifier.refresh());
+                            Navigator.pushNamed(context, kRouteCreateThread)
+                                .then((_) => notifier.refresh());
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF1877F2),
@@ -239,12 +234,8 @@ class _CreateThreadCard extends ConsumerWidget {
             const SizedBox(height: 12),
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const CreateThreadScreen(),
-                  ),
-                ).then((_) => ref.read(discussProvider.notifier).refresh());
+                Navigator.pushNamed(context, kRouteCreateThread)
+                    .then((_) => ref.read(discussProvider.notifier).refresh());
               },
               child: Container(
                 padding: const EdgeInsets.all(12),
@@ -274,12 +265,8 @@ class _CreateThreadCard extends ConsumerWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const CreateThreadScreen(),
-                      ),
-                    ).then((_) => ref.read(discussProvider.notifier).refresh());
+                    Navigator.pushNamed(context, kRouteCreateThread)
+                        .then((_) => ref.read(discussProvider.notifier).refresh());
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -317,12 +304,7 @@ class _ThreadCard extends ConsumerWidget {
     
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => ThreadDetailScreen(thread: thread),
-          ),
-        ).then((_) => notifier.refresh());
+        Navigator.pushNamed(context, '$kRouteThreadPrefix/${thread.id}');
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 8),
@@ -437,7 +419,7 @@ class _ThreadCard extends ConsumerWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 12),
-              // Action buttons - bottom left
+              // Action buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -445,107 +427,119 @@ class _ThreadCard extends ConsumerWidget {
                   GestureDetector(
                     onTap: () async {
                       await notifier.toggleLike(thread.id, 'topic');
-                      notifier.refresh();  // Refresh to update like count
+                      // No full refresh needed: toggleLike already updates local state
                     },
-                    child: Row(
-                      children: [
-                        Icon(
-                          thread.isLiked ? Icons.thumb_up : Icons.thumb_up_outlined,
-                          size: 18,
-                          color: thread.isLiked ? const Color(0xFF1877F2) : const Color(0xFF65676B),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          _formatNumber(thread.likeCount),
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.normal,
-                            color: thread.isLiked ? const Color(0xFF1877F2) : const Color(0xFF65676B),
+                    behavior: HitTestBehavior.opaque,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            thread.isLiked ? Icons.favorite : Icons.favorite_border,
+                            size: 18,
+                            color: thread.isLiked ? const Color(0xFFE53935) : const Color(0xFF65676B),
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 4),
+                          Text(
+                            _formatNumber(thread.likeCount),
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.normal,
+                              color: thread.isLiked ? const Color(0xFFE53935) : const Color(0xFF65676B),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 20),
                   // Comment button
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ThreadDetailScreen(thread: thread),
-                        ),
-                      ).then((_) => notifier.refresh());
+                      Navigator.pushNamed(context, '$kRouteThreadPrefix/${thread.id}');
                     },
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.chat_bubble_outline,
-                          size: 18,
-                          color: Color(0xFF65676B),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          _formatNumber(thread.commentCount),
-                          style: const TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.normal,
+                    behavior: HitTestBehavior.opaque,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.chat_bubble_outline,
+                            size: 18,
                             color: Color(0xFF65676B),
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 4),
+                          Text(
+                            _formatNumber(thread.commentCount),
+                            style: const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.normal,
+                              color: Color(0xFF65676B),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 20),
                   // Save button
                   GestureDetector(
                     onTap: () async {
                       await notifier.toggleSave(thread.id);
-                      notifier.refresh();  // Refresh to update save count
+                      // toggleSave already updates local state
                     },
-                    child: Row(
-                      children: [
-                        Icon(
-                          thread.isSaved ? Icons.bookmark : Icons.bookmark_border,
-                          size: 18,
-                          color: thread.isSaved ? const Color(0xFF1877F2) : const Color(0xFF65676B),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          _formatNumber(thread.saveCount),
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.normal,
+                    behavior: HitTestBehavior.opaque,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            thread.isSaved ? Icons.bookmark : Icons.bookmark_border,
+                            size: 18,
                             color: thread.isSaved ? const Color(0xFF1877F2) : const Color(0xFF65676B),
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 4),
+                          Text(
+                            _formatNumber(thread.saveCount),
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.normal,
+                              color: thread.isSaved ? const Color(0xFF1877F2) : const Color(0xFF65676B),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 20),
-                  // Watch button (replaced Follow)
+                  // Watch button
                   GestureDetector(
                     onTap: () async {
                       await notifier.toggleWatch(thread.id);
-                      notifier.refresh();  // Refresh to update watch status
+                      // toggleWatch already updates local state
                     },
-                    child: Row(
-                      children: [
-                        Icon(
-                          thread.isWatching ? Icons.visibility : Icons.visibility_off,
-                          size: 18,
-                          color: thread.isWatching ? const Color(0xFF1877F2) : const Color(0xFF65676B),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          thread.isWatching ? 'Watching' : 'Watch',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.normal,
+                    behavior: HitTestBehavior.opaque,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            thread.isWatching ? Icons.visibility : Icons.visibility_off,
+                            size: 18,
                             color: thread.isWatching ? const Color(0xFF1877F2) : const Color(0xFF65676B),
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 4),
+                          Text(
+                            thread.isWatching ? 'Watching' : 'Watch',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.normal,
+                              color: thread.isWatching ? const Color(0xFF1877F2) : const Color(0xFF65676B),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

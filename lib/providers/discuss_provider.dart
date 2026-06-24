@@ -146,7 +146,6 @@ class DiscussNotifier extends StateNotifier<DiscussState> {
 
       final watched = watchesRes.map((w) => w['topic_id'] as String).toSet();
 
-      // Update state sets first
       state = state.copyWith(
         followedUsers: followed,
         savedThreads: saved,
@@ -154,7 +153,6 @@ class DiscussNotifier extends StateNotifier<DiscussState> {
         watchedThreads: watched,
       );
 
-      // Now create fresh Thread copies with updated UI state
       final updatedThreads = state.threads.map((t) {
         return _copyThread(
           t,
@@ -225,7 +223,6 @@ class DiscussNotifier extends StateNotifier<DiscussState> {
 
       final response = await query;
 
-      // Create fresh Thread objects, don't mutate
       final newThreads = response.map((json) {
         final t = Thread.fromJson(json);
         if (user != null) {
@@ -316,16 +313,8 @@ class DiscussNotifier extends StateNotifier<DiscussState> {
     final user = _supabase.auth.currentUser;
     if (user == null) return;
 
-    // Check database for true current state
-    final existingLike = await _supabase
-        .from('discussion_likes')
-        .select()
-        .eq('user_id', user.id)
-        .eq('target_id', targetId)
-        .eq('target_type', targetType)
-        .maybeSingle();
-
-    final currentlyLiked = existingLike != null;
+    // ✅ Trust local state instead of checking DB every time
+    final currentlyLiked = state.likedThreads.contains(targetId);
 
     try {
       if (currentlyLiked) {
@@ -343,7 +332,6 @@ class DiscussNotifier extends StateNotifier<DiscussState> {
 
           final updatedThreads = state.threads.map((t) {
             if (t.id == targetId) {
-              // ✅ Create a NEW Thread instance instead of mutating
               return _copyThread(t, likeCount: t.likeCount - 1, isLiked: false);
             }
             return t;
@@ -364,7 +352,6 @@ class DiscussNotifier extends StateNotifier<DiscussState> {
 
           final updatedThreads = state.threads.map((t) {
             if (t.id == targetId) {
-              // ✅ Create a NEW Thread instance instead of mutating
               return _copyThread(t, likeCount: t.likeCount + 1, isLiked: true);
             }
             return t;
@@ -381,15 +368,8 @@ class DiscussNotifier extends StateNotifier<DiscussState> {
     final user = _supabase.auth.currentUser;
     if (user == null) return;
 
-    // Check database for true current state
-    final existingSave = await _supabase
-        .from('discussion_saves')
-        .select()
-        .eq('user_id', user.id)
-        .eq('topic_id', topicId)
-        .maybeSingle();
-
-    final currentlySaved = existingSave != null;
+    // ✅ Trust local state instead of checking DB every time
+    final currentlySaved = state.savedThreads.contains(topicId);
 
     try {
       if (currentlySaved) {
@@ -404,7 +384,6 @@ class DiscussNotifier extends StateNotifier<DiscussState> {
 
         final updatedThreads = state.threads.map((t) {
           if (t.id == topicId) {
-            // ✅ Create a NEW Thread instance instead of mutating
             return _copyThread(t, saveCount: t.saveCount - 1, isSaved: false);
           }
           return t;
@@ -421,7 +400,6 @@ class DiscussNotifier extends StateNotifier<DiscussState> {
 
         final updatedThreads = state.threads.map((t) {
           if (t.id == topicId) {
-            // ✅ Create a NEW Thread instance instead of mutating
             return _copyThread(t, saveCount: t.saveCount + 1, isSaved: true);
           }
           return t;
@@ -437,15 +415,8 @@ class DiscussNotifier extends StateNotifier<DiscussState> {
     final user = _supabase.auth.currentUser;
     if (user == null) return;
 
-    // Check database for true current state
-    final existingWatch = await _supabase
-        .from('discussion_watches')
-        .select()
-        .eq('user_id', user.id)
-        .eq('topic_id', topicId)
-        .maybeSingle();
-
-    final currentlyWatching = existingWatch != null;
+    // ✅ Trust local state instead of checking DB every time
+    final currentlyWatching = state.watchedThreads.contains(topicId);
 
     try {
       if (currentlyWatching) {
@@ -460,7 +431,6 @@ class DiscussNotifier extends StateNotifier<DiscussState> {
 
         final updatedThreads = state.threads.map((t) {
           if (t.id == topicId) {
-            // ✅ Create a NEW Thread instance instead of mutating
             return _copyThread(t, isWatching: false);
           }
           return t;
@@ -477,7 +447,6 @@ class DiscussNotifier extends StateNotifier<DiscussState> {
 
         final updatedThreads = state.threads.map((t) {
           if (t.id == topicId) {
-            // ✅ Create a NEW Thread instance instead of mutating
             return _copyThread(t, isWatching: true);
           }
           return t;
@@ -509,7 +478,6 @@ class DiscussNotifier extends StateNotifier<DiscussState> {
 
         final updatedThreads = state.threads.map((t) {
           if (t.userId == followId) {
-            // ✅ Create a NEW Thread instance instead of mutating
             return _copyThread(t, isFollowingAuthor: false);
           }
           return t;
@@ -527,7 +495,6 @@ class DiscussNotifier extends StateNotifier<DiscussState> {
 
         final updatedThreads = state.threads.map((t) {
           if (t.userId == followId) {
-            // ✅ Create a NEW Thread instance instead of mutating
             return _copyThread(t, isFollowingAuthor: true);
           }
           return t;

@@ -6,9 +6,12 @@ import '../providers/tab_provider.dart';
 import '../models/user_model.dart';
 import '../utils/constants.dart';
 import '../widgets/header.dart';
-import '../widgets/floating_bottom_nav.dart';
 import '../widgets/action_card.dart';
 import 'discuss_hub.dart';
+import 'assessment_screen.dart';
+import 'interview_setup.dart';
+import 'resume_screen.dart';
+import 'my_profile_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -18,6 +21,11 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,46 +51,43 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       return Container(
                         padding: const EdgeInsets.all(kPadL),
                         decoration: const BoxDecoration(
-                          color: kBackground,
+                          color: kSurface,
                           border: Border(
-                            bottom: BorderSide(
-                                color: kBorderColor, width: 1),
+                            bottom: BorderSide(color: kBorderColor, width: 1),
                           ),
                         ),
                         child: Row(
                           children: [
                             InkWell(
-                              onTap: () => ref.read(mainTabIndexProvider.notifier).state = 4,
+                              onTap: () {
+                                Navigator.pushNamed(context, kRouteProfile);
+                              },
                               customBorder: const CircleBorder(),
                               child: CircleAvatar(
                                 radius: 22,
                                 backgroundColor: kSurface,
                                 backgroundImage: p.avatarUrl.isNotEmpty
-                                    ? CachedNetworkImageProvider(
-                                        p.avatarUrl)
+                                    ? CachedNetworkImageProvider(p.avatarUrl)
                                     : null,
                                 child: p.avatarUrl.isEmpty
-                                    ? const Icon(Icons.person,
-                                        color: kSecondaryText, size: 22)
+                                    ? const Icon(Icons.person, color: kSecondaryText, size: 22)
                                     : null,
                               ),
                             ),
                             const SizedBox(width: 12),
                             Expanded(
                               child: InkWell(
-                                onTap: () => ref.read(mainTabIndexProvider.notifier).state = 4,
+                                onTap: () {
+                                  Navigator.pushNamed(context, kRouteProfile);
+                                },
                                 borderRadius: BorderRadius.circular(8),
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 4),
+                                  padding: const EdgeInsets.symmetric(vertical: 4),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        p.displayName.isEmpty
-                                            ? 'Your Name'
-                                            : p.displayName,
+                                        p.displayName.isEmpty ? 'Your Name' : p.displayName,
                                         style: const TextStyle(
                                           inherit: true,
                                           color: kPrimaryText,
@@ -93,9 +98,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       if (p.username.isNotEmpty) ...[
                                         const SizedBox(height: 2),
                                         Text(
-                                          p.username.startsWith('@')
-                                              ? p.username
-                                              : '@${p.username}',
+                                          p.username.startsWith('@') ? p.username : '@${p.username}',
                                           style: const TextStyle(
                                             color: kAccentBlue,
                                             fontSize: kFontSmall,
@@ -108,36 +111,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 ),
                               ),
                             ),
-                          TextButton(
-                            onPressed: () =>
-                                Navigator.pushNamed(context, kRouteEditProfile),
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
-                              side: const BorderSide(
-                                  color: kBorderColor),
-                              shape: const StadiumBorder(),
-                            ),
-                            child: const Text(
-                              'Edit',
-                              style: TextStyle(
-                                inherit: true,
-                                color: kPrimaryText,
-                                fontSize: kFontSmall,
-                                fontWeight: FontWeight.w600,
+                            TextButton(
+                              onPressed: () => Navigator.pushNamed(context, kRouteEditProfile),
+                              style: TextButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                side: const BorderSide(color: kBorderColor),
+                                shape: const StadiumBorder(),
+                              ),
+                              child: const Text(
+                                'Edit',
+                                style: TextStyle(
+                                  inherit: true,
+                                  color: kPrimaryText,
+                                  fontSize: kFontSmall,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
 
                   // ── Section Header ─────────────────────────────────
                   const Padding(
-                    padding: EdgeInsets.fromLTRB(
-                        kPadL, kPadL, kPadL, kPadS),
+                    padding: EdgeInsets.fromLTRB(kPadL, kPadL, kPadL, kPadS),
                     child: Text(
                       'What would you like to do?',
                       style: TextStyle(
@@ -151,40 +150,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   // ── Action Cards ───────────────────────────────────
                   ActionCard(
                     title: 'Assessment',
-                    description:
-                        'Test your knowledge with practice assessments',
+                    description: 'Test your knowledge with practice assessments',
                     icon: Icons.assignment_rounded,
                     accentColor: const Color(0xFF9C27B0),
-                    onTap: () => ref.read(mainTabIndexProvider.notifier).state = 2,
+                    onTap: () {
+                      Navigator.pushNamed(context, kRouteAssessment);
+                    },
                   ),
                   ActionCard(
                     title: 'DiscussHub',
-                    description:
-                        'Ask questions, get answers, and learn from others on the same journey',
+                    description: 'Ask questions, get answers, and learn from others on the same journey',
                     icon: Icons.forum_rounded,
                     accentColor: const Color(0xFFFF9800),
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const DiscussHub()),
-                      );
+                      Navigator.pushNamed(context, kRouteDiscussHub);
                     },
                   ),
                   ActionCard(
                     title: 'Interview Practice',
-                    description:
-                        'Practice with AI-generated interview questions',
+                    description: 'Practice with AI-generated interview questions',
                     icon: Icons.mic_rounded,
                     accentColor: kSuccess,
-                    onTap: () => ref.read(mainTabIndexProvider.notifier).state = 3,
+                    onTap: () {
+                      Navigator.pushNamed(context, kRouteInterview);
+                    },
                   ),
                   ActionCard(
                     title: 'My Resume',
-                    description:
-                        'Build your professional resume with beautiful templates',
+                    description: 'Build your professional resume with beautiful templates',
                     icon: Icons.description_rounded,
                     accentColor: kAccentBlue,
-                    onTap: () => ref.read(mainTabIndexProvider.notifier).state = 1,
+                    onTap: () {
+                      Navigator.pushNamed(context, kRouteResume);
+                    },
                   ),
 
                   const SizedBox(height: 16),
@@ -206,6 +204,7 @@ class _ProfileSectionSkeleton extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(kPadL),
       decoration: const BoxDecoration(
+        color: kSurface,
         border: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       child: Row(

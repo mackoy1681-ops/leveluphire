@@ -63,9 +63,16 @@ class _ActionCardState extends State<ActionCard>
               horizontal: kPadL, vertical: kPadS),
           padding: const EdgeInsets.all(kPadL),
           decoration: BoxDecoration(
-            color: kBackground,
+            color: kSurface,
             borderRadius: BorderRadius.circular(kRadiusCard),
             border: Border.all(color: kBorderColor, width: 1),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0x12000000),
+                blurRadius: 10,
+                offset: Offset(0, 2),
+              ),
+            ],
           ),
           child: Row(
             children: [

@@ -361,7 +361,16 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: kPrimaryText),
           tooltip: 'Back to Home',
-          onPressed: () => ref.read(mainTabIndexProvider.notifier).state = 0,
+          onPressed: () {
+            // If this screen was pushed as a route (web/mobile), pop it.
+            // Otherwise fall back to switching the main tab (legacy wrapper).
+            final nav = Navigator.of(context);
+            if (nav.canPop()) {
+              nav.pop();
+            } else {
+              ref.read(mainTabIndexProvider.notifier).state = 0;
+            }
+          },
         ),
         title: const Text('My Profile', style: TextStyle(color: kPrimaryText)),
         actions: [
@@ -479,134 +488,142 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
           
           return SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.fromLTRB(kPadL, kPadL, kPadL, 180),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundColor: kSurface,
-                  backgroundImage: p.avatarUrl.isNotEmpty
-                      ? CachedNetworkImageProvider(p.avatarUrl)
-                      : null,
-                  child: p.avatarUrl.isEmpty
-                      ? const Icon(Icons.person, size: 50, color: kSecondaryText)
-                      : null,
-                ),
-                const SizedBox(height: 24),
-                
-                Text(
-                  p.displayName.isEmpty ? 'Anonymous User' : p.displayName,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: kPrimaryText,
-                  ),
-                ),
-                if (p.username.isNotEmpty)
-                  Text(
-                    p.username.startsWith('@') ? p.username : '@${p.username}',
-                    style: const TextStyle(
-                      color: kAccentBlue,
-                      fontSize: kFontBase,
-                      fontWeight: FontWeight.w500,
+            padding: const EdgeInsets.all(16),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 600),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundColor: kSurface,
+                      backgroundImage: p.avatarUrl.isNotEmpty
+                          ? CachedNetworkImageProvider(p.avatarUrl)
+                          : null,
+                      child: p.avatarUrl.isEmpty
+                          ? const Icon(Icons.person, size: 50, color: kSecondaryText)
+                          : null,
                     ),
-                  ),
-                const SizedBox(height: 12),
-                
-                if (p.bio.isNotEmpty)
-                  Text(
-                    p.bio,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: kPrimaryText,
-                      fontSize: kFontBase,
-                      height: 1.4,
+                    const SizedBox(height: 24),
+                    
+                    Text(
+                      p.displayName.isEmpty ? 'Anonymous User' : p.displayName,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: kPrimaryText,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                  ),
-                const SizedBox(height: 32),
-                
-                const Text(
-                  'Achievements',
-                  style: TextStyle(
-                    color: kPrimaryText,
-                    fontSize: kFontTitle,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                
-                if (earnedAwards.isNotEmpty)
-                  Wrap(
-                    spacing: 16,
-                    runSpacing: 16,
-                    alignment: WrapAlignment.center,
-                    children: earnedAwards.map((award) {
-                      final value = _getAwardValue(award['testName'])!;
-                      final isLarge = award['icon'] == 6 || award['icon'] == 7 || award['icon'] == 8;
-                      final iconSize = isLarge ? 60.0 : 50.0;
-                      
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Image.asset(
-                            'assets/icons/${award['icon']}.png',
-                            width: iconSize,
-                            height: iconSize,
-                            errorBuilder: (context, error, stack) {
-                              return Icon(
-                                Icons.emoji_events,
-                                size: iconSize,
-                                color: kAccentBlue,
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            award['displayName'],
-                            style: TextStyle(
-                              color: kSecondaryText,
-                              fontSize: isLarge ? kFontSmall : 11,
-                            ),
-                          ),
-                          if (value != 'Earned' || (value == 'Earned' && _showAwardScores))
-                            Text(
-                              value,
-                              style: const TextStyle(
-                                color: kAccentBlue,
-                                fontSize: 11,
-                                fontWeight: FontWeight.w500,
+                    if (p.username.isNotEmpty)
+                      Text(
+                        p.username.startsWith('@') ? p.username : '@${p.username}',
+                        style: const TextStyle(
+                          color: kAccentBlue,
+                          fontSize: kFontBase,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    const SizedBox(height: 12),
+                    
+                    if (p.bio.isNotEmpty)
+                      Text(
+                        p.bio,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: kPrimaryText,
+                          fontSize: kFontBase,
+                          height: 1.4,
+                        ),
+                      ),
+                    const SizedBox(height: 32),
+                    
+                    const Text(
+                      'Achievements',
+                      style: TextStyle(
+                        color: kPrimaryText,
+                        fontSize: kFontTitle,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    
+                    if (earnedAwards.isNotEmpty)
+                      Wrap(
+                        spacing: 16,
+                        runSpacing: 16,
+                        alignment: WrapAlignment.center,
+                        children: earnedAwards.map((award) {
+                          final value = _getAwardValue(award['testName'])!;
+                          final isLarge = award['icon'] == 6 || award['icon'] == 7 || award['icon'] == 8;
+                          final iconSize = isLarge ? 60.0 : 50.0;
+                          
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset(
+                                'assets/icons/${award['icon']}.png',
+                                width: iconSize,
+                                height: iconSize,
+                                errorBuilder: (context, error, stack) {
+                                  return Icon(
+                                    Icons.emoji_events,
+                                    size: iconSize,
+                                    color: kAccentBlue,
+                                  );
+                                },
                               ),
-                            ),
-                        ],
-                      );
-                    }).toList(),
-                  ),
-                const SizedBox(height: 32),
-                
-                const Text(
-                  'Insights',
-                  style: TextStyle(
-                    color: kPrimaryText,
-                    fontSize: kFontTitle,
-                    fontWeight: FontWeight.bold,
-                  ),
+                              const SizedBox(height: 4),
+                              Text(
+                                award['displayName'],
+                                style: TextStyle(
+                                  color: kSecondaryText,
+                                  fontSize: isLarge ? kFontSmall : 11,
+                                ),
+                              ),
+                              if (value != 'Earned' || (value == 'Earned' && _showAwardScores))
+                                Text(
+                                  value,
+                                  style: const TextStyle(
+                                    color: kAccentBlue,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                            ],
+                          );
+                        }).toList(),
+                      ),
+                    const SizedBox(height: 32),
+                    
+                    const Text(
+                      'Insights',
+                      style: TextStyle(
+                        color: kPrimaryText,
+                        fontSize: kFontTitle,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    
+                    ReorderableColumn(
+                      children: insightWidgetsList,
+                      onReorder: (oldIndex, newIndex) {
+                        setState(() {
+                          if (newIndex > oldIndex) newIndex -= 1;
+                          final item = _insightOrder.removeAt(oldIndex);
+                          _insightOrder.insert(newIndex, item);
+                        });
+                        _saveInsightOrder();
+                      },
+                    ),
+                    
+                    const SizedBox(height: 40),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                
-                // Fixed ReorderableColumn - removed buildDefaultDragHandles
-                ReorderableColumn(
-                  children: insightWidgetsList,
-                  onReorder: (oldIndex, newIndex) {
-                    setState(() {
-                      if (newIndex > oldIndex) newIndex -= 1;
-                      final item = _insightOrder.removeAt(oldIndex);
-                      _insightOrder.insert(newIndex, item);
-                    });
-                    _saveInsightOrder();
-                  },
-                ),
-              ],
+              ),
             ),
           );
         },

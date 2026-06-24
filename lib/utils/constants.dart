@@ -1,18 +1,18 @@
-// LevelUpHire — App Constants (Twitter/X color palette)
+// LevelUpHire — App Constants (LinkedIn-inspired light palette)
 
 import 'package:flutter/material.dart';
 
 // ─── Colors ──────────────────────────────────────────────────────────────────
 
-const Color kBackground    = Color(0xFF000000);
-const Color kSurface       = Color(0xFF16181C);
-const Color kPrimaryText   = Color(0xFFE7E9EA);
-const Color kSecondaryText = Color(0xFF71767B);
-const Color kAccentBlue    = Color(0xFF1D9BF0);
-const Color kBorderColor   = Color(0xFF2F3336);
-const Color kError         = Color(0xFFF4212E);
-const Color kSuccess       = Color(0xFF00BA7C);
-const Color kOverlay       = Color(0xFF1E2732);
+const Color kBackground    = Color(0xFFF3F2EF);
+const Color kSurface       = Color(0xFFFFFFFF);
+const Color kPrimaryText   = Color(0xFF191919);
+const Color kSecondaryText = Color(0xFF666666);
+const Color kAccentBlue    = Color(0xFF0A66C2);
+const Color kBorderColor   = Color(0xFFD9DDE3);
+const Color kError         = Color(0xFFC62828);
+const Color kSuccess       = Color(0xFF057642);
+const Color kOverlay       = Color(0xFFE8F3FF);
 
 // ─── Typography ──────────────────────────────────────────────────────────────
 
@@ -55,6 +55,21 @@ const String kRouteResume       = '/resume';
 const String kRouteResumeEditor = '/resume-editor';
 const String kRouteAssessment   = '/assessment';
 const String kRouteInterview    = '/interview';
+const String kRouteDiscussHub   = '/discuss';
+
+// Discuss deep links
+const String kRouteCreateThread = '/discuss/create';
+const String kRouteThreadPrefix = '/discuss/thread'; // final URL: /discuss/thread/<id>
+
+// Assessment sub-routes (helps mobile Chrome back-swipe use in-app history)
+const String kRouteAbstractTest    = '/assessment/abstract';
+const String kRouteNumericalTest   = '/assessment/numerical';
+const String kRouteVerbalTest      = '/assessment/verbal';
+const String kRoutePersonalityTest = '/assessment/personality';
+const String kRouteIntegrityTest   = '/assessment/integrity';
+const String kRouteEssaySetup      = '/assessment/essay';
+const String kRouteEnglishExam     = '/assessment/english';
+const String kRouteCivilService    = '/assessment/civil-service';
 
 // ─── Assets ──────────────────────────────────────────────────────────────────
 

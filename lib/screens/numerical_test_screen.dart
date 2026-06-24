@@ -408,99 +408,112 @@ class _NumericalTestScreenState extends ConsumerState<NumericalTestScreen> {
                   topRight: Radius.circular(24),
                 ),
               ),
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(kPadL),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 8),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(kPadL),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            _deepSpace,
-                            _nebulaBlue,
-                          ],
-                        ),
-                        borderRadius: BorderRadius.circular(kRadiusCard),
-                        border: Border.all(
-                          color: _electricBlue.withOpacity(0.3),
-                          width: 1,
-                        ),
-                      ),
-                      child: Text(
-                        currentQuestion.text,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: kFontTitle,
-                          fontWeight: FontWeight.w500,
-                          height: 1.4,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    const SizedBox(height: 28),
-                    ...currentQuestion.options.asMap().entries.map((entry) {
-                      final idx = entry.key;
-                      final option = entry.value;
-                      final isSelected = _selectedOptionIndex == idx;
-                      return GestureDetector(
-                        onTap: () => _selectOption(idx),
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(kPadL, kPadL, kPadL, 0),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(kPadL),
                           decoration: BoxDecoration(
-                            color: isSelected ? _electricBlue.withOpacity(0.15) : Colors.transparent,
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                _deepSpace,
+                                _nebulaBlue,
+                              ],
+                            ),
                             borderRadius: BorderRadius.circular(kRadiusCard),
                             border: Border.all(
-                              color: isSelected ? _electricBlue : _electricBlue.withOpacity(0.5),
-                              width: isSelected ? 2 : 1,
+                              color: _electricBlue.withOpacity(0.3),
+                              width: 1,
                             ),
                           ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 32,
-                                height: 32,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: isSelected ? _electricBlue : Colors.white54,
-                                    width: 1.5,
-                                  ),
-                                  color: isSelected ? _electricBlue.withOpacity(0.2) : Colors.transparent,
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    String.fromCharCode(65 + idx),
-                                    style: TextStyle(
-                                      color: isSelected ? _electricBlue : Colors.white70,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: kFontSmall,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  option,
-                                  style: TextStyle(
-                                    color: isSelected ? _electricBlue : Colors.white,
-                                    fontSize: kFontBase,
-                                  ),
-                                ),
-                              ),
-                            ],
+                          child: Text(
+                            currentQuestion.text,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: kFontTitle,
+                              fontWeight: FontWeight.w500,
+                              height: 1.4,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
                         ),
-                      );
-                    }),
-                    const SizedBox(height: 24),
-                    SizedBox(
+                        const SizedBox(height: 28),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView(
+                      padding: const EdgeInsets.symmetric(horizontal: kPadL),
+                      children: [
+                        ...currentQuestion.options.asMap().entries.map((entry) {
+                          final idx = entry.key;
+                          final option = entry.value;
+                          final isSelected = _selectedOptionIndex == idx;
+                          return GestureDetector(
+                            onTap: () => _selectOption(idx),
+                            child: Container(
+                              margin: const EdgeInsets.only(bottom: 12),
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: isSelected ? _electricBlue.withOpacity(0.15) : Colors.transparent,
+                                borderRadius: BorderRadius.circular(kRadiusCard),
+                                border: Border.all(
+                                  color: isSelected ? _electricBlue : _electricBlue.withOpacity(0.5),
+                                  width: isSelected ? 2 : 1,
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 32,
+                                    height: 32,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: isSelected ? _electricBlue : Colors.white54,
+                                        width: 1.5,
+                                      ),
+                                      color: isSelected ? _electricBlue.withOpacity(0.2) : Colors.transparent,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        String.fromCharCode(65 + idx),
+                                        style: TextStyle(
+                                          color: isSelected ? _electricBlue : Colors.white70,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: kFontSmall,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Text(
+                                      option,
+                                      style: TextStyle(
+                                        color: isSelected ? _electricBlue : Colors.white,
+                                        fontSize: kFontBase,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(kPadL, 12, kPadL, 20),
+                    child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: _selectedOptionIndex != null ? _finalizeAndMove : null,
@@ -530,8 +543,8 @@ class _NumericalTestScreenState extends ConsumerState<NumericalTestScreen> {
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
