@@ -11,4 +11,4 @@ export PATH="${FLUTTER_DIR}/bin:${PATH}"
 flutter config --enable-web
 flutter precache --web
 flutter pub get
-flutter build web --release
+flutter build web --release --no-wasm-dry-run

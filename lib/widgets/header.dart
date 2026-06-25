@@ -97,8 +97,8 @@ class AppHeader extends ConsumerWidget {
                   ),
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
