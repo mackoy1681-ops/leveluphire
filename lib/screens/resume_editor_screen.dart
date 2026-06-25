@@ -10,8 +10,7 @@ import '../services/pdf_service.dart';
 import '../utils/constants.dart';
 import 'package:reorderables/reorderables.dart';
 import 'package:intl/intl.dart';
-import 'resume_view_screen.dart';
-import 'print_preview_screen.dart';
+import '../models/route_args.dart';
 import '../widgets/resume_templates/template_data.dart';
 import '../widgets/resume_templates/templates/templates.dart';
 
@@ -121,11 +120,10 @@ class _ResumeEditorScreenState extends ConsumerState<ResumeEditorScreen> {
       final saved = await ref.read(resumeListProvider.notifier).save(_buildResume());
       ref.read(currentResumeProvider.notifier).state = saved;
       if (mounted) {
-        Navigator.push(
+        Navigator.pushNamed(
           context,
-          MaterialPageRoute(
-            builder: (_) => ResumeViewScreen(resume: saved),
-          ),
+          kRouteResumeView,
+          arguments: ResumeViewArgs(resume: saved),
         );
       }
     } catch (e) {
@@ -989,13 +987,12 @@ class _ResumeEditorScreenState extends ConsumerState<ResumeEditorScreen> {
         // Print Preview Button
         ElevatedButton.icon(
           onPressed: () {
-            Navigator.push(
+            Navigator.pushNamed(
               context,
-              MaterialPageRoute(
-                builder: (_) => PrintPreviewScreen(
-                  resume: resume,
-                  selectedTemplateId: _selectedTemplate,
-                ),
+              kRoutePrintPreview,
+              arguments: PrintPreviewArgs(
+                resume: resume,
+                selectedTemplateId: _selectedTemplate,
               ),
             );
           },
@@ -1016,13 +1013,12 @@ class _ResumeEditorScreenState extends ConsumerState<ResumeEditorScreen> {
         // Scaled preview (clickable to open print preview)
         GestureDetector(
           onTap: () {
-            Navigator.push(
+            Navigator.pushNamed(
               context,
-              MaterialPageRoute(
-                builder: (_) => PrintPreviewScreen(
-                  resume: resume,
-                  selectedTemplateId: _selectedTemplate,
-                ),
+              kRoutePrintPreview,
+              arguments: PrintPreviewArgs(
+                resume: resume,
+                selectedTemplateId: _selectedTemplate,
               ),
             );
           },

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/resume_provider.dart';
-import '../providers/tab_provider.dart';
+import '../models/route_args.dart';
+import '../utils/navigation.dart';
 import '../models/resume_model.dart';
 import '../services/auth_service.dart';
 import '../utils/constants.dart';
 import 'package:intl/intl.dart';
-import 'resume_view_screen.dart';
 
 class ResumeScreen extends ConsumerWidget {
   const ResumeScreen({super.key});
@@ -22,16 +22,7 @@ class ResumeScreen extends ConsumerWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           tooltip: 'Back to Home',
-          onPressed: () {
-            // If this screen was pushed as a route (web/mobile), pop it.
-            // Otherwise fall back to switching the main tab.
-            final nav = Navigator.of(context);
-            if (nav.canPop()) {
-              nav.pop();
-            } else {
-              ref.read(mainTabIndexProvider.notifier).state = 0;
-            }
-          },
+          onPressed: () => popOrHome(context),
         ),
       ),
       body: Stack(
@@ -52,13 +43,12 @@ class ResumeScreen extends ConsumerWidget {
                         const SizedBox(height: 10),
                     itemBuilder: (_, i) => _ResumeCard(
                       resume: resumes[i],
-                      onTap: () => Navigator.push(
+                      onTap: () => Navigator.pushNamed(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) => ResumeViewScreen(
-                            resume: resumes[i],
-                            isFromMyResumes: true,
-                          ),
+                        kRouteResumeView,
+                        arguments: ResumeViewArgs(
+                          resume: resumes[i],
+                          isFromMyResumes: true,
                         ),
                       ),
                       onDelete: () => _confirmDelete(context, ref, resumes[i].id),

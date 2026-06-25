@@ -12,7 +12,7 @@ import '../data/civil_service/numerical_questions.dart';
 import '../data/civil_service/analytical_questions.dart';
 import '../data/civil_service/general_info_questions.dart';
 import '../models/question_model.dart';
-import 'civil_service_review.dart';
+import '../models/route_args.dart';
 
 class CivilServiceTestScreen extends StatefulWidget {
   const CivilServiceTestScreen({super.key});
@@ -362,17 +362,16 @@ class _CivilServiceTestScreenState extends State<CivilServiceTestScreen> {
   }
 
   void _openReview() {
-    Navigator.push(
+    Navigator.pushNamed(
       context,
-      MaterialPageRoute(
-        builder: (context) => CivilServiceReview(
-          questions: _selectedQuestions,
-          userAnswers: _userAnswersList,
-          correctAnswers: _correctAnswersList,
-          explanations: _explanationsList,
-          score: _score,
-          totalQuestions: _selectedQuestions.length,
-        ),
+      kRouteCivilServiceReview,
+      arguments: CivilServiceReviewArgs(
+        questions: _selectedQuestions,
+        userAnswers: _userAnswersList,
+        correctAnswers: _correctAnswersList,
+        explanations: _explanationsList,
+        score: _score,
+        totalQuestions: _selectedQuestions.length,
       ),
     );
   }

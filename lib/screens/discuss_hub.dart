@@ -5,7 +5,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../providers/discuss_provider.dart';
 import '../models/discuss_models.dart';
-import '../providers/tab_provider.dart';
 import '../providers/auth_provider.dart';
 import '../utils/constants.dart';
 

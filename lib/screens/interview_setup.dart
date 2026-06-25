@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../utils/constants.dart';
-import '../providers/tab_provider.dart';
+import '../utils/navigation.dart';
 import 'interview_incoming.dart';
 
 class InterviewSetup extends ConsumerStatefulWidget {
@@ -85,16 +85,7 @@ class _InterviewSetupState extends ConsumerState<InterviewSetup> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: kPrimaryText),
           tooltip: 'Back to Home',
-          onPressed: () {
-            // If this screen was pushed as a route (web/mobile), pop it.
-            // Otherwise fall back to switching the main tab.
-            final nav = Navigator.of(context);
-            if (nav.canPop()) {
-              nav.pop();
-            } else {
-              ref.read(mainTabIndexProvider.notifier).state = 0;
-            }
-          },
+          onPressed: () => popOrHome(context),
         ),
       ),
       body: SingleChildScrollView(

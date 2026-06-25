@@ -226,7 +226,6 @@ class _NumericalTestScreenState extends ConsumerState<NumericalTestScreen> {
 
   void _closeResults() {
     Navigator.pop(context);
-    Navigator.pop(context);
   }
 
   String _formatTime(int seconds) {

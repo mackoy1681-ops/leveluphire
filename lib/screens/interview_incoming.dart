@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../utils/constants.dart';
-import 'interview_screen.dart';
+import '../models/route_args.dart';
 
 class InterviewIncoming extends StatefulWidget {
   final String profession;
@@ -55,14 +55,13 @@ class _InterviewIncomingState extends State<InterviewIncoming> {
     
     if (mounted) {
       Navigator.pop(context);
-      Navigator.push(
+      Navigator.pushNamed(
         context,
-        MaterialPageRoute(
-          builder: (context) => InterviewScreen(
-            profession: widget.profession,
-            isFemale: widget.isFemale,
-            imageFileName: widget.imageFileName,
-          ),
+        kRouteInterviewSession,
+        arguments: InterviewSessionArgs(
+          profession: widget.profession,
+          isFemale: widget.isFemale,
+          imageFileName: widget.imageFileName,
         ),
       );
     }

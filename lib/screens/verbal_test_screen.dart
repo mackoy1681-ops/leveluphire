@@ -226,7 +226,6 @@ class _VerbalTestScreenState extends ConsumerState<VerbalTestScreen> {
 
   void _closeResults() {
     Navigator.pop(context);
-    Navigator.pop(context);
   }
 
   String _formatTime(int seconds) {

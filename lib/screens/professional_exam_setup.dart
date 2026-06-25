@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../models/question_model.dart';
 import '../utils/constants.dart';
-import 'professional_exam_screen.dart';
+import '../models/route_args.dart';
 
 class ProfessionalExamSetup extends StatefulWidget {
   const ProfessionalExamSetup({super.key});
@@ -31,11 +31,10 @@ class _ProfessionalExamSetupState extends State<ProfessionalExamSetup> {
     }
 
     Navigator.pop(context);
-    Navigator.push(
+    Navigator.pushNamed(
       context,
-      MaterialPageRoute(
-        builder: (context) => ProfessionalExamLoading(profession: profession),
-      ),
+      kRouteProfessionalExamLoading,
+      arguments: profession,
     );
   }
 
@@ -277,13 +276,12 @@ Make the questions specific to ${widget.profession}. Return ONLY the JSON array,
         }
         
         if (mounted) {
-          Navigator.pushReplacement(
+          Navigator.pushReplacementNamed(
             context,
-            MaterialPageRoute(
-              builder: (context) => ProfessionalExamScreen(
-                profession: widget.profession,
-                questions: questions,
-              ),
+            kRouteProfessionalExam,
+            arguments: ProfessionalExamArgs(
+              profession: widget.profession,
+              questions: questions,
             ),
           );
         }

@@ -71,6 +71,18 @@ const String kRouteEssaySetup      = '/assessment/essay';
 const String kRouteEnglishExam     = '/assessment/english';
 const String kRouteCivilService    = '/assessment/civil-service';
 
+// Secondary routes (each maps to one browser history entry on web)
+const String kRouteEssayWriting           = '/assessment/essay/write';
+const String kRouteEssayResult            = '/assessment/essay/result';
+const String kRouteResumeView               = '/resume/view';
+const String kRouteCivilServiceReview       = '/assessment/civil-service/review';
+const String kRouteEnglishResults           = '/assessment/english/results';
+const String kRouteEnglishReview            = '/assessment/english/review';
+const String kRoutePrintPreview             = '/resume/print-preview';
+const String kRouteProfessionalExamLoading  = '/assessment/professional/loading';
+const String kRouteProfessionalExam         = '/assessment/professional/exam';
+const String kRouteInterviewSession         = '/interview/session';
+
 // ─── Assets ──────────────────────────────────────────────────────────────────
 
 const String kLogoPath = 'assets/images/logof.png';

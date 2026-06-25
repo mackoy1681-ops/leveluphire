@@ -227,8 +227,7 @@ class _AbstractTestScreenState extends ConsumerState<AbstractTestScreen> {
   }
 
   void _closeResults() {
-    Navigator.pop(context); // Close results screen
-    Navigator.pop(context); // Close test screen
+    Navigator.pop(context);
   }
 
   String _formatTime(int seconds) {

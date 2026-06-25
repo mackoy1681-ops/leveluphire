@@ -6,7 +6,7 @@ import '../models/assessment_model.dart';
 import '../providers/assessment_provider.dart';
 import '../services/auth_service.dart';
 import '../utils/constants.dart';
-import '../providers/tab_provider.dart';
+import '../utils/navigation.dart';
 
 // Test Screen Imports
 import 'abstract_test_screen.dart';
@@ -102,16 +102,7 @@ class _AssessmentScreenState extends ConsumerState<AssessmentScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: kPrimaryText),
           tooltip: 'Back to Home',
-          onPressed: () {
-            // If this screen was pushed as a route (web/mobile), pop it.
-            // Otherwise fall back to switching the main tab.
-            final nav = Navigator.of(context);
-            if (nav.canPop()) {
-              nav.pop();
-            } else {
-              ref.read(mainTabIndexProvider.notifier).state = 0;
-            }
-          },
+          onPressed: () => popOrHome(context),
         ),
         actions: [
           GestureDetector(

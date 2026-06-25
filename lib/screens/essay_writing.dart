@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../utils/constants.dart';
-import 'essay_result.dart';
+import '../models/route_args.dart';
 
 class EssayWriting extends StatefulWidget {
   final String topic;
@@ -111,14 +111,13 @@ class _EssayWritingState extends State<EssayWriting> {
     });
 
     // Navigate to results with essay text
-    Navigator.pushReplacement(
+    Navigator.pushReplacementNamed(
       context,
-      MaterialPageRoute(
-        builder: (context) => EssayResult(
-          topic: widget.topic,
-          essayText: essayText,
-          wordCount: _wordCount,
-        ),
+      kRouteEssayResult,
+      arguments: EssayResultArgs(
+        topic: widget.topic,
+        essayText: essayText,
+        wordCount: _wordCount,
       ),
     );
   }

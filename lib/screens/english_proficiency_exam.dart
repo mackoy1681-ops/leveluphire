@@ -12,7 +12,8 @@ import '../data/english_proficiency/vocabulary_questions.dart';
 import '../data/english_proficiency/reading_questions.dart';
 import '../data/english_proficiency/business_questions.dart';
 import '../models/question_model.dart';
-import 'english_results.dart';
+import '../models/route_args.dart';
+import '../utils/constants.dart';
 
 class EnglishProficiencyExam extends ConsumerStatefulWidget {
   const EnglishProficiencyExam({super.key});
@@ -299,31 +300,30 @@ class _EnglishProficiencyExamState extends ConsumerState<EnglishProficiencyExam>
     }
     
     if (mounted) {
-      Navigator.pushReplacement(
+      Navigator.pushReplacementNamed(
         context,
-        MaterialPageRoute(
-          builder: (context) => EnglishResults(
-            score: correctCount,
-            totalQuestions: _currentExamQuestions.length,
-            percentage: percentage,
-            passed: passed,
-            categoryScores: {
-              'Grammar': categoryCorrect['grammar'] ?? 0,
-              'Vocabulary': categoryCorrect['vocabulary'] ?? 0,
-              'Reading Comp': categoryCorrect['reading'] ?? 0,
-              'Business English': categoryCorrect['business'] ?? 0,
-            },
-            categoryTotals: {
-              'Grammar': categoryTotal['grammar'] ?? 0,
-              'Vocabulary': categoryTotal['vocabulary'] ?? 0,
-              'Reading Comp': categoryTotal['reading'] ?? 0,
-              'Business English': categoryTotal['business'] ?? 0,
-            },
-            userAnswersList: userAnswersList,
-            questions: _currentExamQuestions,
-            correctAnswersList: correctAnswersList,
-            explanationsList: explanationsList,
-          ),
+        kRouteEnglishResults,
+        arguments: EnglishResultsArgs(
+          score: correctCount,
+          totalQuestions: _currentExamQuestions.length,
+          percentage: percentage,
+          passed: passed,
+          categoryScores: {
+            'Grammar': categoryCorrect['grammar'] ?? 0,
+            'Vocabulary': categoryCorrect['vocabulary'] ?? 0,
+            'Reading Comp': categoryCorrect['reading'] ?? 0,
+            'Business English': categoryCorrect['business'] ?? 0,
+          },
+          categoryTotals: {
+            'Grammar': categoryTotal['grammar'] ?? 0,
+            'Vocabulary': categoryTotal['vocabulary'] ?? 0,
+            'Reading Comp': categoryTotal['reading'] ?? 0,
+            'Business English': categoryTotal['business'] ?? 0,
+          },
+          userAnswersList: userAnswersList,
+          questions: _currentExamQuestions,
+          correctAnswersList: correctAnswersList,
+          explanationsList: explanationsList,
         ),
       );
     }

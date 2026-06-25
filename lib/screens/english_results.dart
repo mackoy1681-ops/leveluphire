@@ -4,8 +4,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'english_review.dart';
-import 'english_proficiency_exam.dart';
+import '../models/route_args.dart';
+import '../utils/constants.dart';
 import '../models/question_model.dart';
 
 class EnglishResults extends StatelessWidget {
@@ -292,11 +292,9 @@ class EnglishResults extends StatelessWidget {
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () {
-                            Navigator.pushReplacement(
+                            Navigator.pushReplacementNamed(
                               context,
-                              MaterialPageRoute(
-                                builder: (context) => const EnglishProficiencyExam(),
-                              ),
+                              kRouteEnglishExam,
                             );
                           },
                           style: OutlinedButton.styleFrom(
@@ -316,15 +314,14 @@ class EnglishResults extends StatelessWidget {
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () {
-                            Navigator.push(
+                            Navigator.pushNamed(
                               context,
-                              MaterialPageRoute(
-                                builder: (context) => EnglishReview(
-                                  userAnswersList: userAnswersList,
-                                  questions: questions,
-                                  correctAnswersList: correctAnswersList,
-                                  explanationsList: explanationsList,
-                                ),
+                              kRouteEnglishReview,
+                              arguments: EnglishReviewArgs(
+                                userAnswersList: userAnswersList,
+                                questions: questions,
+                                correctAnswersList: correctAnswersList,
+                                explanationsList: explanationsList,
                               ),
                             );
                           },

@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import '../utils/constants.dart';
-import 'essay_writing.dart';
 
 class EssaySetup extends StatefulWidget {
   const EssaySetup({super.key});
@@ -69,13 +68,10 @@ class _EssaySetupState extends State<EssaySetup> {
   void _startEssay() {
     if (_selectedTopic == null) return;
     
-    Navigator.push(
+    Navigator.pushNamed(
       context,
-      MaterialPageRoute(
-        builder: (context) => EssayWriting(
-          topic: _selectedTopic!,
-        ),
-      ),
+      kRouteEssayWriting,
+      arguments: _selectedTopic!,
     );
   }
 

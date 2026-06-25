@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../providers/auth_provider.dart';
-import '../providers/tab_provider.dart';
 import '../models/user_model.dart';
 import '../utils/constants.dart';
 import '../widgets/header.dart';

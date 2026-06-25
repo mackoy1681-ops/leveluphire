@@ -5,7 +5,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:reorderables/reorderables.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/auth_provider.dart';
-import '../providers/tab_provider.dart';
+import '../utils/navigation.dart';
 import '../utils/constants.dart';
 import '../models/user_model.dart';
 
@@ -361,16 +361,7 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: kPrimaryText),
           tooltip: 'Back to Home',
-          onPressed: () {
-            // If this screen was pushed as a route (web/mobile), pop it.
-            // Otherwise fall back to switching the main tab (legacy wrapper).
-            final nav = Navigator.of(context);
-            if (nav.canPop()) {
-              nav.pop();
-            } else {
-              ref.read(mainTabIndexProvider.notifier).state = 0;
-            }
-          },
+          onPressed: () => popOrHome(context),
         ),
         title: const Text('My Profile', style: TextStyle(color: kPrimaryText)),
         actions: [
